@@ -85,6 +85,7 @@ class AuralClient:
         timeout: float = 30.0,
         max_retries: int = 3,
         backoff_seconds: float = 1.0,
+        user_agent: str = "aural-python-client/0.1.0",
         transport: Optional[Transport] = None,
     ) -> None:
         resolved_key = api_key or os.environ.get("AURAL_API_KEY")
@@ -97,6 +98,7 @@ class AuralClient:
         self._timeout = timeout
         self._max_retries = max_retries
         self._backoff_seconds = backoff_seconds
+        self._user_agent = user_agent
         self._transport = transport or _default_transport
 
     # ------------------------------------------------------------------ #
@@ -110,7 +112,11 @@ class AuralClient:
             query = urllib.parse.urlencode({key: value for key, value in params.items() if value is not None})
             url = "{}?{}".format(url, query)
 
-        headers = {"Authorization": "Bearer {}".format(self._api_key), "Accept": "application/json"}
+        headers = {
+            "Authorization": "Bearer {}".format(self._api_key),
+            "Accept": "application/json",
+            "User-Agent": self._user_agent,
+        }
         body: Optional[bytes] = None
         if json_body is not None:
             body = json.dumps(json_body).encode("utf-8")

@@ -74,6 +74,7 @@ class ClientBasicsTest(unittest.TestCase):
         self.assertEqual(call["method"], "POST")
         self.assertEqual(call["url"], DEFAULT_BASE_URL + "/interviews")
         self.assertEqual(call["headers"]["Authorization"], "Bearer dlv_test_key")
+        self.assertEqual(call["headers"]["User-Agent"], "aural-python-client/0.1.0")
         self.assertEqual(call["headers"]["Content-Type"], "application/json")
         self.assertEqual(
             call["body"],
